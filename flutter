@@ -1,0 +1,83 @@
+import 'package:flutter/material.dart';
+
+void main() {
+  runApp(MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Jogo da Velha',
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+      ),
+      home: JogoDaVelha(),
+    );
+  }
+}
+
+class JogoDaVelha extends StatefulWidget {
+  @override
+  _JogoDaVelhaState createState() => _JogoDaVelhaState();
+}
+
+class _JogoDaVelhaState extends State<JogoDaVelha> {
+  List<String> tabuleiro = ['', '', '', '', '', '', '', '', ''];
+  String jogadorAtual = 'X';
+  
+  void jogar(int index) {
+    setState(() {
+      if (tabuleiro[index] == '') {
+        tabuleiro[index] = jogadorAtual;
+        jogadorAtual = (jogadorAtual == 'X') ? 'O' : 'X';
+      }
+    });
+  }
+
+  void reiniciarJogo() {
+    setState(() {
+      tabuleiro = ['', '', '', '', '', '', '', '', ''];
+      jogadorAtual = 'X';
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: Text('Jogo da Velha')),
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          GridView.builder(
+            shrinkWrap: true,
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3),
+            itemCount: 9,
+            itemBuilder: (context, index) {
+              return GestureDetector(
+                onTap: () => jogar(index),
+                child: Container(
+                  margin: EdgeInsets.all(10),
+                  decoration: BoxDecoration(
+                    border: Border.all(color: Colors.black),
+                    color: Colors.white,
+                  ),
+                  child: Center(
+                    child: Text(
+                      tabuleiro[index],
+                      style: TextStyle(fontSize: 50, fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                ),
+              );
+            },
+          ),
+          ElevatedButton(
+            onPressed: reiniciarJogo,
+            child: Text('Reiniciar Jogo'),
+          ),
+        ],
+      ),
+    );
+  }
+}
